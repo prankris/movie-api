@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./db:/db:ro   # Mount the SQLite files as read-only
+    environment:
+      - MOVIES_DB_PATH=/db/movies.db
+      - RATINGS_DB_PATH=/db/ratings.db
+    depends_on:
+      - sqlite
+
+  sqlite:
+    image: alpine
+    command: ["tail", "-f", "/dev/null"]  # Just hold the volume
+    volumes:
+      - ./db:/db

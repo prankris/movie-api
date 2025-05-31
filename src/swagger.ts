@@ -11,12 +11,16 @@ const options: swaggerJSDoc.Options = {
         },
         servers: [
             {
-                url: '/api', // ✅ Tells Swagger UI that all endpoints are under /api
+                url: '/api',
                 description: 'Base API URL',
             },
         ],
     },
-    apis: ['./src/routes/**/*.ts'],
+    apis: [
+        process.env.NODE_ENV === 'production'
+            ? './dist/routes/**/*.js'
+            : './src/routes/**/*.ts',
+    ],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
