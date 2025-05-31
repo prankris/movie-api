@@ -1,67 +1,146 @@
-# Movie API Code Test
+Here's an updated `README.md` for your Node.js + TypeScript REST API project using SQLite, following the 12-Factor App methodology and clean architecture patterns, with Docker and Swagger support:
 
-## Pre-requisites
+---
 
-* An IDE or text editor of your choice
-* [Sqlite3](http://www.sqlitetutorial.net/)
+# 🎬 Movie API
 
+A TypeScript-based REST API that exposes movie data stored in two SQLite databases (`movies.db`, `ratings.db`), following clean architecture, design patterns, and [12-Factor App](https://12factor.net/) principles.
 
-## Task
-Your task is to create an API on top of a couple different databases.  It should conform to the user stories provided below.  You are free to use whatever language you prefer, however our tech stack features NodeJS, Java and Ruby. If you're comfortable with any of these, try to favor them.  Google and the interwebs are at your disposal.
+---
 
-**The Databases**
-The databases are provided as a SQLite3 database in `db/`.  It does not require any credentials to login.  You can run SQL queries directly against the database using:
+## 🚀 Features
+
+* REST API built with **Express** + **TypeScript**
+* Uses **SQLite** databases:
+
+  * `movies.db` (movie data)
+  * `ratings.db` (user ratings)
+* Clean architecture:
+
+  * Layered design (Controller → Service → Repository)
+  * Dependency Injection
+* **Pagination**, **sorting**, and **filtering** support
+* **Swagger UI** for API documentation
+* **Jest** testing (excluded from production builds)
+* Runs via **Docker** with DBs mounted as volumes
+
+---
+
+## 📁 Project Structure
 
 ```
-sqlite <path to db file>
+.
+├── db/                  # Contains SQLite databases (host-mounted)
+├── src/
+│   ├── controllers/     # Express route handlers
+│   ├── services/        # Business logic
+│   ├── repositories/    # SQLite DB queries
+│   ├── routes/          # API routes
+│   ├── utils/           # Pagination, formatting, etc.
+│   ├── config/          # App/environment config
+│   └── swagger.ts       # Swagger setup
+├── __tests__/           # Unit tests (excluded from build)
+├── Dockerfile           # Multi-stage Docker build
+├── docker-compose.yml   # Compose setup with volume-mounted DBs
+├── tsconfig.json        # TypeScript config
+└── README.md
 ```
 
-`.tables` will return a list of available tables and `.schema <table>` will provide the schema.
+---
 
-## Considerations
-When developing your solution, please consider the following:
+## 🛠 Setup
 
-* Structure of your endpoints - Can you easily extend the API to support new endpoints as feature requests come in?
-* Quality of your code - Does your code demonstrate the use of design patterns?
-* Testability - Is your code testable?
-* Can your solution be easily configured and deployed?  Consider guidelines from [12 Factor App](http://12factor.net/)
+### 1. Clone and install
 
+```bash
+git clone https://github.com/prankris/movie-api.git
+cd movie-api
+npm install
+```
 
-## User Stories
+### 2. Run locally
 
-#### List All Movies
-AC:
+```bash
+npm run build
+npm start
+```
 
-* An endpoint exists that lists all movies
-* List is paginated: 50 movies per page, the page can be altered with the `page` query params
-* Columns should include: imdb id, title, genres, release date, budget
-* Budget is displayed in dollars
+> Make sure `db/movies.db` and `db/ratings.db` exist.
 
-#### Movie Details
-AC:
+---
 
-* An endpoint exists that lists the movie details for a particular movie
-* Details should include: imdb id, title, description, release date, budget, runtime, average rating, genres, original language, production companies
-* Budget should be displayed in dollars
-* Ratings are pulled from the rating database
+## 🧪 Run Tests
 
-#### Movies By Year
-AC:
+```bash
+npm run test
+```
 
-* An endpoint exists that will list all movies from a particular year 
-* List is paginated: 50 movies per page, the page can be altered with the `page` query params
-* List is sorted by date in chronological order
-* Sort order can be descending
-* Columns include: imdb id, title, genres, release date, budget
+---
 
-#### Movies By Genre
-AC:
+## 🐳 Run with Docker
 
-* An endpoint exists that will list all movies by a genre
-* List is paginated: 50 movies per page, the page can be altered with the `page` query params
-* Columns include: imdb id, title, genres, release date, budget
+### 1. Ensure `db/` contains:
 
-## Tips
+```
+db/
+├── movies.db
+└── ratings.db
+```
 
-* This is a test of your abilities and not how fast you can crank through random stories.  As such, it is more important to produce well structured code that meets the criteria in the user stories rather than getting all stories done.
-* If you get stuck, please ask someone.  We want to know how you work both as an individual and as part of a team.  You will not lose points for asking for help on something that is unclear or where you are stuck.
+### 2. Build and start
+
+```bash
+docker-compose up --build
+```
+
+### 3. Access API
+
+* Base URL: `http://localhost:3000/api`
+* Swagger Docs: `http://localhost:3000/api/docs`
+
+---
+
+## 🧭 API Endpoints
+
+### `GET /api/movies`
+
+* List all movies (paginated, 50 per page)
+
+### `GET /api/movies/{imdbId}`
+
+* Movie details with average rating
+
+### `GET /api/movies/year/{year}`
+
+* Movies released in a specific year (with sort support)
+
+### `GET /api/movies/genre/{genre}`
+
+* Movies filtered by genre
+
+---
+
+## 📖 Swagger Docs
+
+After running:
+
+```
+http://localhost:3000/api/docs
+```
+
+Uses `swagger-jsdoc` and `swagger-ui-express`.
+
+---
+
+## 📦 12-Factor Compliance
+
+* ✅ Codebase (versioned in Git)
+* ✅ Dependencies (`package.json`)
+* ✅ Config via ENV variables
+* ✅ Backing services via DB volumes
+* ✅ Stateless & process-based
+* ✅ Port binding (Docker exposes `3000`)
+* ✅ Logs via `stdout`
+* ✅ Dev/prod parity via Docker
+* ✅ Build/release/run separation (via multi-stage Dockerfile)
+
