@@ -1,7 +1,3 @@
-Here's an updated `README.md` for your Node.js + TypeScript REST API project using SQLite, following the 12-Factor App methodology and clean architecture patterns, with Docker and Swagger support:
-
----
-
 # 🎬 Movie API
 
 A TypeScript-based REST API that exposes movie data stored in two SQLite databases (`movies.db`, `ratings.db`), following clean architecture, design patterns, and [12-Factor App](https://12factor.net/) principles.
