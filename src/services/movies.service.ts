@@ -20,15 +20,24 @@ export class MoviesService {
         return { ...movie, averageRating: avgRating };
     }
 
-    async getMoviesByYear(year: number, page = 1) {
+    async getMoviesByYear(year: number, page = 1, sort = 'asc') {
         const limit = 50;
         const offset = (page - 1) * limit;
-        return this.movieRepo.getMoviesByYear(year, limit, offset);
+        if (year < 1900 || year > new Date().getFullYear()) {
+            throw new Error('Invalid year');
+        }
+        if (sort !== 'asc' && sort !== 'desc') {
+            throw new Error('Invalid sort order');
+        }
+        return this.movieRepo.getMoviesByYear(year, limit, offset, sort);
     }
 
     async getMoviesByGenre(genre: string, page = 1) {
         const limit = 50;
         const offset = (page - 1) * limit;
+        if (!genre || genre.trim() === '') {
+            throw new Error('Genre is required');
+        }
         return this.movieRepo.getMoviesByGenre(genre, limit, offset);
     }
 }

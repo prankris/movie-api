@@ -40,7 +40,17 @@ export class MoviesController {
                 return res.status(400).json({ error: 'Invalid year' });
             }
             const page = parseInt(req.query.page as string) || 1;
-            const movies = await this.service.getMoviesByYear(year, page);
+            let sort: 'asc' | 'desc' = 'asc';
+            if (req.query.sort) {
+                const sortParam = req.query.sort as string;
+                if (sortParam !== 'asc' && sortParam !== 'desc') {
+                    return res
+                        .status(400)
+                        .json({ error: 'Invalid sort order' });
+                }
+                sort = sortParam as 'asc' | 'desc';
+            }
+            const movies = await this.service.getMoviesByYear(year, page, sort);
             res.json(movies);
         } catch (err) {
             /* istanbul ignore next */
@@ -54,7 +64,7 @@ export class MoviesController {
     moviesByGenre = async (req: Request, res: Response) => {
         try {
             const genre = req.params.genre;
-            if (!genre) {
+            if (!genre || genre.trim() === '') {
                 return res.status(400).json({ error: 'Genre is required' });
             }
             const page = parseInt(req.query.page as string) || 1;

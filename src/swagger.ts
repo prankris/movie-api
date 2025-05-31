@@ -1,6 +1,7 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
+/* istanbul ignore file */
 const options: swaggerJSDoc.Options = {
     definition: {
         openapi: '3.0.0',

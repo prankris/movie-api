@@ -26,7 +26,8 @@ export class MoviesRepository {
     getMoviesByYear(
         year: number,
         limit: number,
-        offset: number
+        offset: number,
+        sort: string
     ): Promise<any[]> {
         return new Promise((resolve, reject) => {
             this.db.all(
@@ -34,7 +35,7 @@ export class MoviesRepository {
                         printf('$%.2f', budget / 1000000.0 * 1000000.0) AS budget
                  FROM movies
                  WHERE strftime('%Y', releaseDate) = ?
-                 ORDER BY releaseDate ASC
+                 ORDER BY releaseDate ${sort}
                  LIMIT ? OFFSET ?`,
                 [year.toString(), limit, offset],
                 (err, rows) => (err ? reject(err) : resolve(rows))

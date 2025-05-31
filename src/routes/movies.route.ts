@@ -70,9 +70,16 @@ router.get('/movies/:imdbId', controller.movieDetails);
  *         schema:
  *           type: integer
  *         description: Page number for pagination
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *         description: Sort order (asc or desc)
  *     responses:
  *       200:
  *         description: List of movies released in the specified year
+ *      400:
+ *        description: Invalid year or sort order
  */
 router.get('/movies/year/:year', controller.moviesByYear);
 /**

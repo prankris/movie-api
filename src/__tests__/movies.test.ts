@@ -44,6 +44,12 @@ describe('Movies API', () => {
         expect(response.body.averageRating).toEqual(2.2);
     });
 
+    it('should not return rating when missing', async () => {
+        const response = await request(app).get('/api/movies/tt0105695');
+        expect(response.status).toBe(200);
+        expect(response.body.average_rating).toBeUndefined();
+    });
+
     it('should return 404 for non-existent movie', async () => {
         const response = await request(app).get('/api/movies/999999');
         expect(response.status).toBe(404);
@@ -52,6 +58,20 @@ describe('Movies API', () => {
         const response = await request(app).get('/api/movies/year/1994');
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
+    });
+    it('should return movies by year in descending order', async () => {
+        const response = await request(app).get(
+            '/api/movies/year/1994?page=2&sort=desc'
+        );
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
+    });
+    it('should return 400 for invalid sort order', async () => {
+        const response = await request(app).get(
+            '/api/movies/year/1994?page=2&sort=invalid'
+        );
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error', 'Invalid sort order');
     });
     it('should return 400 for non-numeric year', async () => {
         const response = await request(app).get('/api/movies/year/test');
