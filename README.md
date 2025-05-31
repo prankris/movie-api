@@ -34,6 +34,7 @@ A TypeScript-based REST API that exposes movie data stored in two SQLite databas
 │   ├── routes/          # API routes
 │   ├── utils/           # Pagination, formatting, etc.
 │   ├── config/          # App/environment config
+│   ├── infrastructure/  # DB shutdown
 │   └── swagger.ts       # Swagger setup
 ├── __tests__/           # Unit tests (excluded from build)
 ├── Dockerfile           # Multi-stage Docker build
@@ -139,4 +140,18 @@ Uses `swagger-jsdoc` and `swagger-ui-express`.
 * ✅ Logs via `stdout`
 * ✅ Dev/prod parity via Docker
 * ✅ Build/release/run separation (via multi-stage Dockerfile)
+* ✅ Disposability Graceful shutdown via SIGINT and SIGTERM
 
+---
+
+## ✨ Graceful Shutdown
+
+The app listens to `SIGINT` and `SIGTERM` and gracefully closes DB connections via:
+
+```ts
+import { closeDbConnections } from './infrastructure/db';
+```
+
+This enables disposability and clean container shutdowns.
+
+---
